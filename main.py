@@ -2,6 +2,10 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
+@app.route("/", methods=["GET"])
+def index():
+    return jsonify({"message": "Flask API is running!"})
+    
 @app.route("/hello", methods=["GET"])
 def hello():
     return jsonify({"message": "Hello from Python API!"})
@@ -36,4 +40,5 @@ def create_order():
 if __name__ == "__main__":
     # 這段只在你本機 python main.py 時會跑
     app.run(host="0.0.0.0", port=8000, debug=True)
+
 
