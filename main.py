@@ -1,40 +1,38 @@
-from fastapi import FastAPI
-from pydantic import BaseModel
-import uvicorn
+from flask import Flask, request, jsonify
 
-app = FastAPI(
-    title = "Sample API for Custom Connector",
-    description="This API is for Power Automate Custom Connector demo",
-    version="1.0"
-    )
+app = Flask(__name__)
 
-class Order(BaseModel):
-    product: str
-    quantity: int
-    price: float
-
-@app.get("/hello")
+@app.route("/hello", methods=["GET"])
 def hello():
-    return {"message": "Hello from Python API!"}
+    return jsonify({"message": "Hello from Python API!"})
 
-@app.get("/employee/{emp_id}")
-def get_employee(emp_id: int):
-    return{
+@app.route("/employee/<int:emp_id>", methods=["GET"])
+def get_employee(emp_id):
+    return jsonify({
         "id": emp_id,
         "name": f"User {emp_id}",
         "department": "IT",
         "email": f"user{emp_id}@company.com"
-        }
+    })
 
-@app.post("/order")
-def create_order(order: Order):
-    total = order.quantity * order.price
-    return {
-        "product": order.product,
-        "quantity": order.quantity,
+@app.route("/order", methods=["POST"])
+def create_order():
+    data = request.get_json()
+
+    product = data.get("product")
+    quantity = data.get("quantity")
+    price = data.get("price")
+
+    total = quantity * price
+
+    return jsonify({
+        "product": product,
+        "quantity": quantity,
         "total_price": total,
         "status": "Order created successfully"
-    }
+    })
 
-if __name__ == '__main__':
-    uvicorn.run('main:app', host='0.0.0.0', port=8000)
+
+if __name__ == "__main__":
+    # Flask 直接啟動，不用 uvicorn
+    app.run(host="0.0.0.0", port=8000, debug=True)
