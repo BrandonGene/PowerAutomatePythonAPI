@@ -34,5 +34,6 @@ def create_order():
 
 
 if __name__ == "__main__":
-    # Flask 直接啟動，不用 uvicorn
+    # 這段只在你本機 python main.py 時會跑
     app.run(host="0.0.0.0", port=8000, debug=True)
+
