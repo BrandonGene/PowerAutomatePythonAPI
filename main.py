@@ -10,8 +10,10 @@ def index():
 def hello():
     return jsonify({"message": "Hello from Python API!"})
 
-@app.route("/employee/<int:emp_id>", methods=["GET"])
+@app.route("/employee", methods=["GET"])
 def get_employee(emp_id):
+    emp_id = request.args.get("emp_id", type=int)
+    
     return jsonify({
         "id": emp_id,
         "name": f"User {emp_id}",
@@ -40,5 +42,6 @@ def create_order():
 if __name__ == "__main__":
     # 這段只在你本機 python main.py 時會跑
     app.run(host="0.0.0.0", port=8000, debug=True)
+
 
 
